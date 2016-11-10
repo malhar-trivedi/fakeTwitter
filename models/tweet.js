@@ -9,10 +9,22 @@ let tweetSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  message: String,
-  image: String,
-  href: String,
-  userName: String,
+  message: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+    required: true,
+  },
+  href: {
+    type: String,
+    default: '#',
+  },
+  userName: {
+    type: String,
+    required: true,
+  },
   userId: {
     type: String,
     required: true,

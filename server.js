@@ -110,21 +110,15 @@ function getLatestTweetsFromCache(userId) {
 app.post('/tweet', function(req, res) {
   // TODO get user info from cookie, console.log('Cookies: ', req.cookies)
   let payload = req.body;
-  let userId = 'myset';  // TODO get this from cookie
+  // let userId = 'myset';  // TODO get this from cookie and put in payload
   if(!payload.message) {
     handleError(res, 'Invalid message', 'Invalid response', 400);
-  }
-  let newTweet = new Tweet({message: payload.message, userId: userId});
+  }  
 
-  newTweet.save()
-  .then((result) => {
-    res.status(201).json({status: 'ok'});
-    return result;
-  })
-  .then((result) => {
-    return writeService.fanOut(userId, result.id, result.date.getTime());
-  })
+  res.status(201).json({status: 'ok'});
+
+  writeService.fanOut(payload)
   .catch((err) => {
-    handleError(res, err.message, 'could not save message', 500);
+    log.error(err.message);
   });
 });
