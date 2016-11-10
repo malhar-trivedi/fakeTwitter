@@ -1,0 +1,29 @@
+{
+  "name": "fakeTwitter",
+  "version": "0.0.1",
+  "description": "simple twitter",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "LOG_LEVEL=info REDIS_URL=redis://localhost:6379 MONGODB_URI=mongodb://localhost:27017/twitter node server.js",
+    "dev-log": "npm run dev | ./node_modules/.bin/bunyan",
+    "prod": "LOG_LEVEL=warn node server.js",
+    "lint": "./node_modules/.bin/eslint server.js models/ public/js/addElement.js"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "body-parser": "^1.13.3",
+    "bunyan": "^1.8.4",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.13.3",
+    "lodash": "^4.16.6",
+    "mongodb": "^2.0.43",
+    "mongoose": "^4.6.6",
+    "redis": "^2.6.3"
+  },
+  "devDependencies": {
+    "eslint": "^3.9.1",
+    "eslint-config-google": "^0.7.0",
+    "mocha": "^3.1.2"
+  }
+}

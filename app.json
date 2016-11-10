@@ -1,0 +1,7 @@
+{
+  "name": "Simple fake twitter",
+  "description": "Simple fake twitter",
+  "repository": "",
+  "keywords": ["node", "express"],
+  "addons": ["mongolab"]
+}
