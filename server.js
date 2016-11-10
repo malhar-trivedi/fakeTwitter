@@ -56,7 +56,7 @@ app.get('/tweets', function(req, res) {
   .then((tweetIds) => {
     return Tweet.find(
       {_id: {'$in': tweetIds}},
-      {'_id': 0,  '__v': 0}
+      {'_id': 0, '__v': 0}
     ).limit(LAST_TWEETS).sort({date: -1}).exec();
   })
   .then((result) => {
@@ -95,7 +95,7 @@ app.get('/tweets/:timestamp', function(req, res) {
 });
 
 function getTweetsFromCacheByTimeRange(userId, beginTime, endTime) {
-  let args = [userId, endTime, beginTime];
+  let args = [userId, endTime, '(' + beginTime];
   return redisClient.zrevrangebyscoreAsync(args);
 }
 
@@ -113,7 +113,7 @@ app.post('/tweet', function(req, res) {
   // let userId = 'myset';  // TODO get this from cookie and put in payload
   if(!payload.message) {
     handleError(res, 'Invalid message', 'Invalid response', 400);
-  }  
+  }
 
   res.status(201).json({status: 'ok'});
 

@@ -1,14 +1,47 @@
 'use strict';
 
-$('#btnAdd').on('click', function() {
-  let options = {
-    image: 'http://placehold.it/64x64',
-    alt: 'image',
-    href: '#',
-    text: 'Lorem ipsum and something bullshit',
-    userName: 'New Guy',
-  };
-  $('.media-list').prepend(createElement(options));
+$('document').ready(function() {
+  let lastTimestamp;
+  function refreshTweets() {
+    $.ajax({
+      url: '/tweets/' + lastTimestamp,
+      success: function(data) {
+        if(data && data.length > 0) {
+          lastTimestamp = getTime(data[0].date);
+          let finalElements = '';
+          for(let i=0; i<data.length; ++i) {
+            finalElements += createElement(data[i]);
+          }
+          $('.media-list').prepend(finalElements);
+        }
+      },
+      complete: function() {
+        setTimeout(refreshTweets, 3000);
+      },
+    });
+  }
+
+  $.ajax({
+    url: '/tweets',
+    success: function(data) {
+      if(data && data.length > 0) {
+        let finalElements = '';
+        lastTimestamp = getTime(data[0].date);
+        for(let i=0; i<data.length; ++i) {
+          finalElements += createElement(data[i]);
+        }
+        $('.media-list').prepend(finalElements);
+      }
+    },
+    complete: function() {
+      setTimeout(refreshTweets, 3000);
+    },
+  });
+
+  function getTime(timeString) {
+    let newDate = new Date(timeString);
+    return newDate.getTime();
+  }
 });
 
 /**
@@ -21,7 +54,7 @@ $('#btnAdd').on('click', function() {
 function createElement(options) {
   let newElement = '<li class="media"><div class="media-left"><a href="' +
       options.href +'">';
-  newElement += '<img class="media-object" src="' + 
+  newElement += '<img class="media-object" src="' +
       options.image + '" alt="image"></a>';
   newElement += '</div><div class="media-body"><h4 class="media-heading">' +
       options.userName + '</h4>'+ options.message +'</div></li>';
