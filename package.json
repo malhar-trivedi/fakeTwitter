@@ -3,6 +3,11 @@
   "version": "0.0.1",
   "description": "simple twitter",
   "main": "server.js",
+  "license": "MIT",
+  "repository": {
+      "type": "git",
+      "url": "git://github.com/malhar-trivedi/fakeTwitter.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "LOG_LEVEL=info REDIS_URL=redis://localhost:6379 MONGODB_URI=mongodb://localhost:27017/twitter node server.js",
