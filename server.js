@@ -48,9 +48,18 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({'error': message});
 }
 
+function getUserId(input) {
+  try{
+    let parsedVal = JSON.parse(input.details);
+    return parsedVal.userId;
+  }catch(e) {
+    return '';
+  }
+}
+
 app.get('/tweets', function(req, res) {
-  // TODO get user info from cookie, console.log('Cookies: ', req.cookies)
-  let userId = 'myset';
+  log.debug('request for user ', getUserId(req.cookies));
+  let userId = getUserId(req.cookies);
 
   getLatestTweetsFromCache(userId)
   .then((tweetIds) => {
@@ -67,17 +76,14 @@ app.get('/tweets', function(req, res) {
   });
 });
 
-app.get('/tweets/:timestamp', function(req, res) {
-  // TODO get user information from cookie,console.log('Cookies:',req.cookies)
+app.get('/tweets/:timestamp', function(req, res) {  
+  log.debug('request for user ', getUserId(req.cookies));
+  let userId = getUserId(req.cookies);
   let beginTime = _.parseInt(req.params.timestamp);
   let endTime = Date.now();
   if(!_.isFinite(beginTime)) {
-    handleError(res, 'Invalid timestamp', 'Invalid timestamp', 400);
+    return handleError(res, 'Invalid timestamp', 'Invalid timestamp', 400);
   }
-
-  // beginTime = '1473472501';
-  // endTime = '1478742902';
-  let userId = 'myset';
 
   getTweetsFromCacheByTimeRange(userId, beginTime, endTime)
   .then((tweetIds) => {
@@ -108,13 +114,13 @@ function getLatestTweetsFromCache(userId) {
 }
 
 app.post('/tweet', function(req, res) {
-  // TODO get user info from cookie, console.log('Cookies: ', req.cookies)
+  let userId = getUserId(req.cookies);
   let payload = req.body;
   // let userId = 'myset';  // TODO get this from cookie and put in payload
   if(!payload.message) {
-    handleError(res, 'Invalid message', 'Invalid response', 400);
+    return handleError(res, 'Invalid message', 'Invalid response', 400);
   }
-
+  payload = _.defaults(payload, {'userId': userId});
   res.status(201).json({status: 'ok'});
 
   writeService.fanOut(payload)

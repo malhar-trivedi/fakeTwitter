@@ -17,8 +17,31 @@ class user {
   getUserFollowers(userId) {
     // TODO implement graph db for getting user information
     log.info('Need to implement graph db to get actual user data');
-    let followers = [userId];
-    return Promise.resolve(followers);
+    
+    let cache = {
+      myUserId: ['myUserId'],
+      followingUserId: ['followingUserId', 'myUserId']
+    };
+    return Promise.resolve(cache[userId]);
+  }
+  
+  getUserInfo(userId) {
+    // TODO replace this with graph DB
+    let cache = {
+      myUserId: {
+        image: 'https://s3.amazonaws.com/trimal.personal/frog64x64.jpg',
+        href: '#',
+        userName: 'Malhar',
+        userId: 'myUserId',
+      },
+      followingUserId: {
+        image: 'https://s3.amazonaws.com/trimal.personal/butterfly64x64',
+        href: '#',
+        userName: 'Nick',
+        userId: 'followingUserId',
+      }
+    };
+    return Promise.resolve(cache[userId]);
   }
 }
 

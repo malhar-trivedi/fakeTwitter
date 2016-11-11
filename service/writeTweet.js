@@ -19,18 +19,15 @@ class writeTweet {
   
   fanOut(options) {  
     let self = this;
-    // call user service, get profile info like image, href, title, userID
-    // say you update options object with that information
-    options = _.defaults(options, {    //TODO replace this 
-      image: 'http://placehold.it/64x64',
-      href: '#',
-      userName: 'nickName',
-      userId: 'myset',
-    });
-    let newTweet = new Tweet(options);
     let timestamp, tweetId;
 
-    return newTweet.save()
+    return this.userService.getUserInfo(options.userId)
+    .then((userInfo) => {
+      options = _.defaults(userInfo, options);
+      log.info('User information received ', options);
+      let newTweet = new Tweet(options);      
+      return newTweet.save()
+    })
     .then((result) => {
       tweetId = result.id;
       timestamp = result.date.getTime();

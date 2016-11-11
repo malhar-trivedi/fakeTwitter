@@ -3,8 +3,14 @@
 $('document').ready(function() {
   let lastTimestamp;
   function refreshTweets() {
+    let url;
+    if(!lastTimestamp) {
+      url = '/tweets';
+    } else {
+      url = '/tweets/' + lastTimestamp
+    }
     $.ajax({
-      url: '/tweets/' + lastTimestamp,
+      url: url,
       success: function(data) {
         if(data && data.length > 0) {
           lastTimestamp = getTime(data[0].date);
@@ -21,6 +27,7 @@ $('document').ready(function() {
     });
   }
 
+  Cookies.set('details', {userId: 'myUserId'});
   $.ajax({
     url: '/tweets',
     success: function(data) {
