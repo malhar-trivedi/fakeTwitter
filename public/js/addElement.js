@@ -44,6 +44,32 @@ $('document').ready(function() {
       setTimeout(refreshTweets, 3000);
     },
   });
+  
+  $( "#textboxbutton").click(function() {
+    //it should fetch text from textbox
+    let message = $('#textbox').val();
+    
+    //we should do checking., 
+    if(!message){
+      console.error('message not present');
+      return;
+    }
+    let payload = {'message': message};
+    $.ajax({
+      url: '/tweet',
+      type: 'POST',
+      dataType: 'json',
+      data: JSON.stringify(payload),
+      contentType: 'application/json; charset=utf-8',
+      success: function (res) {
+        console.log('post was successful', res);
+        $('#textbox').val('');
+      },
+      fail: function (err) {
+        console.error('error happened', err);
+      }
+    });
+  });
 
   function getTime(timeString) {
     let newDate = new Date(timeString);
